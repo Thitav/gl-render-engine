@@ -1,0 +1,9 @@
+[submodule "lib/assimp"]
+	path = lib/assimp
+	url = https://github.com/assimp/assimp
+[submodule "lib/cglm"]
+	path = lib/cglm
+	url = https://github.com/recp/cglm
+[submodule "lib/glfw"]
+	path = lib/glfw
+	url = https://github.com/glfw/glfw
