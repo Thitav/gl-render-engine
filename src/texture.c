@@ -9,14 +9,23 @@ void texture_init(Texture *texture, GLenum type)
   glGenTextures(1, &texture->handle);
 }
 
-void texture_load(Texture *texture, const char *path, GLenum format, GLenum source_format)
+void texture_load(Texture *texture, const char *path)
 {
   stbi_set_flip_vertically_on_load(1);
 
   int width, height, channels;
   stbi_uc *data = stbi_load(path, &width, &height, &channels, 0);
 
-  glTexImage2D(texture->type, 0, format, width, height, 0, source_format, GL_UNSIGNED_BYTE, data);
+  switch (channels)
+  {
+  case 4:
+    glTexImage2D(texture->type, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    break;
+  default:
+    glTexImage2D(texture->type, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    break;
+  }
+
   glGenerateMipmap(texture->type);
 
   stbi_image_free(data);

@@ -11,8 +11,11 @@ typedef struct model_t
   Mesh *meshes;
   unsigned int nmeshes;
   char *directory;
+  size_t directory_len;
 } Model;
 
-void model_load(const char *path);
+void model_init(Model *model, const char *path);
+void model_destroy(Model *model);
+void model_draw(Model *model, Shader *shader);
 
 #endif

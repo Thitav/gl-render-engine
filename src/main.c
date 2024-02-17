@@ -183,17 +183,17 @@ int main()
   Texture container_diff;
   texture_init(&container_diff, GL_TEXTURE_2D);
   texture_bind(&container_diff, 0);
-  texture_load(&container_diff, "resources/container_diff.png", GL_RGBA, GL_RGBA);
+  texture_load(&container_diff, "resources/container_diff.png");
 
   Texture container_spec;
   texture_init(&container_spec, GL_TEXTURE_2D);
   texture_bind(&container_spec, 1);
-  texture_load(&container_spec, "resources/container_spec.png", GL_RGBA, GL_RGBA);
+  texture_load(&container_spec, "resources/container_spec.png");
 
   Texture container_emis;
   texture_init(&container_emis, GL_TEXTURE_2D);
   texture_bind(&container_emis, 2);
-  texture_load(&container_emis, "resources/matrix.jpg", GL_RGB, GL_RGB);
+  texture_load(&container_emis, "resources/matrix.jpg");
 
   // texture_param(texture_container, GL_TEXTURE_WRAP_S, GL_REPEAT);
   // texture_param(texture_container, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -207,7 +207,7 @@ int main()
   Light light_props = {.ambient = (vec3s){0.2f, 0.2f, 0.2f},
                        .diffuse = (vec3s){0.5f, 0.5f, 0.5f},
                        .specular = (vec3s){1.0f, 1.0f, 1.0f},
-                       .position = (vec3s){1.2f, 1.0f, 2.0f}};
+                       .position = (vec3s){3.0f, 1.0f, 2.0f}};
 
   shader_bind(&shader);
   shader_uniform_int(&shader, "material.diffuse", cube_mat.diffuse);
@@ -221,7 +221,11 @@ int main()
 
   camera_perspective_init(&camera, glm_rad(45), SCR_WIDTH / SCR_HEIGHT, 0.1f, 1000.0f);
 
-  // model_load("resources/backpack/backpack.obj");
+  // Model backpack_model;
+  // model_init(&backpack_model, "resources/backpack/backpack.obj");
+
+  Model test_model;
+  model_init(&test_model, "resources/cube.obj");
 
   glEnable(GL_DEPTH_TEST);
   while (!glfwWindowShouldClose(window))
@@ -244,8 +248,12 @@ int main()
     shader_uniform_mat4(&shader, "projection", camera.projection);
     shader_uniform_vec3(&shader, "viewPos", camera.position);
 
-    vao_bind(&vao_cube);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+    model_draw(&test_model, &shader);
+
+    // vao_bind(&vao_cube);
+    // glDrawArrays(GL_TRIANGLES, 0, 36);
+
+    // model_draw(&model, &shader);
 
     model = glms_mat4_identity();
     model = glms_translate(model, light_props.position);
@@ -263,6 +271,8 @@ int main()
     glfwPollEvents();
   }
 
+  // model_destroy(&backpack_model);
+  model_destroy(&test_model);
   vao_destroy(&vao_cube);
   vao_destroy(&vao_light);
   vbo_destroy(&vbo);
